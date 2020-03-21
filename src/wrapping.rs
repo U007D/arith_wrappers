@@ -1,7 +1,7 @@
 use arith_traits::Wrap;
 use std::ops::Add;
 
-pub struct Wrapping<T>(T);
+pub struct Wrapping<T>(pub T);
 
 // Suppress false positive recursion warning
 #[allow(unconditional_recursion)]
