@@ -1,6 +1,7 @@
 use arith_traits::Wrap;
 use std::ops::Add;
 
+#[derive(Debug)]
 pub struct Wrapping<T>(pub T);
 
 // Suppress false positive recursion warning
@@ -56,6 +57,13 @@ impl<T: Wrap> Wrap for Wrapping<T> {
         self.wrapping_sub(rhs)
     }
 }
+
+impl<T: PartialEq> PartialEq for Wrapping<T> {
+    fn eq(&self, rhs: &Self) -> bool {
+        self.0 == rhs.0
+    }
+}
+// TODO: Add conditional impls for Eq, Partial/Ord, Hash, etc
 
 impl<T: Add<Output = T>> Add for Wrapping<T> {
     type Output = Self;
