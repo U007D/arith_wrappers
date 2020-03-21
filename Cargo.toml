@@ -10,7 +10,8 @@ repository = "https://github.com/u007d/arith_wrappers"
 version = "0.1.0"
 
 [dependencies]
-thiserror = "*"
+thiserror = "1.0.12"
+arith_traits = { git = "https://github.com/u007d/arith_traits" }
 
 [profile.dev]
 codegen-units = 1

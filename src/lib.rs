@@ -19,5 +19,7 @@
 
 mod consts;
 mod error;
+mod wrapping;
 pub use error::Error;
+pub use wrapping::Wrapping;
 pub type Result<T, E = Error> = std::result::Result<T, E>;
