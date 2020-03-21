@@ -10,7 +10,7 @@ repository = "https://github.com/u007d/arith_wrappers"
 version = "0.1.0"
 
 [dependencies]
-thiserror = "1.0.12"
+thiserror = "1.*"
 arith_traits = { git = "https://github.com/u007d/arith_traits" }
 
 [profile.dev]
