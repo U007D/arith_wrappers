@@ -1,5 +1,5 @@
 use arith_traits::Wrap;
-use std::ops::Add;
+use std::ops::{Add, Deref};
 
 #[derive(Debug)]
 pub struct Wrapping<T>(pub T);
@@ -65,10 +65,17 @@ impl<T: PartialEq> PartialEq for Wrapping<T> {
 }
 // TODO: Add conditional impls for Eq, Partial/Ord, Hash, etc
 
-impl<T: Add<Output = T>> Add for Wrapping<T> {
-    type Output = Self;
+impl<T: Add<Output = T>> Deref for Wrapping<T> {
+    type Target = T;
 
-    fn add(self, rhs: Self) -> Self::Output {
-        Self(self.0 + rhs.0)
+    fn deref(&self) -> &Self::Target {
+        &self.0
     }
 }
+// impl<T: Add<U> + Add<Output = T>, U: Add<Output = T>> Add<U> for Wrapping<T> {
+//     type Output = Self;
+//
+//     fn add(self, rhs: U) -> Self::Output {
+//         Self(self.0 + rhs)
+//     }
+// }
