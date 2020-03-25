@@ -72,10 +72,11 @@ impl<T: Add<Output = T>> Deref for Wrapping<T> {
         &self.0
     }
 }
-// impl<T: Add<U> + Add<Output = T>, U: Add<Output = T>> Add<U> for Wrapping<T> {
-//     type Output = Self;
-//
-//     fn add(self, rhs: U) -> Self::Output {
-//         Self(self.0 + rhs)
-//     }
-// }
+
+impl<T: Wrap<R, Output = T>, R> Add<R> for Wrapping<T> {
+    type Output = Self;
+
+    fn add(self, rhs: R) -> Self::Output {
+        Self(self.0.wrapping_add(rhs))
+    }
+}
