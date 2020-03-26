@@ -15,22 +15,22 @@ impl<T: Wrap> Wrap for Wrapping<T> {
     }
 
     #[inline]
-    fn wrapping_add(self, rhs: impl Into<Self>) -> Self::Output {
+    fn wrapping_add(self, rhs: Self) -> Self::Output {
         self.wrapping_add(rhs)
     }
 
     #[inline]
-    fn wrapping_div(self, rhs: impl Into<Self>) -> Self::Output {
+    fn wrapping_div(self, rhs: Self) -> Self::Output {
         self.wrapping_div(rhs)
     }
 
     #[inline]
-    fn wrapping_div_euclid(self, rhs: impl Into<Self>) -> Self::Output {
+    fn wrapping_div_euclid(self, rhs: Self) -> Self::Output {
         self.wrapping_div_euclid(rhs)
     }
 
     #[inline]
-    fn wrapping_mul(self, rhs: impl Into<Self>) -> Self::Output {
+    fn wrapping_mul(self, rhs: Self) -> Self::Output {
         self.wrapping_mul(rhs)
     }
 
@@ -45,12 +45,12 @@ impl<T: Wrap> Wrap for Wrapping<T> {
     }
 
     #[inline]
-    fn wrapping_rem(self, rhs: impl Into<Self>) -> Self::Output {
+    fn wrapping_rem(self, rhs: Self) -> Self::Output {
         self.wrapping_rem(rhs)
     }
 
     #[inline]
-    fn wrapping_rem_euclid(self, rhs: impl Into<Self>) -> Self::Output {
+    fn wrapping_rem_euclid(self, rhs: Self) -> Self::Output {
         self.wrapping_rem_euclid(rhs)
     }
 
@@ -65,7 +65,7 @@ impl<T: Wrap> Wrap for Wrapping<T> {
     }
 
     #[inline]
-    fn wrapping_sub(self, rhs: impl Into<Self>) -> Self::Output {
+    fn wrapping_sub(self, rhs: Self) -> Self::Output {
         self.wrapping_sub(rhs)
     }
 }
