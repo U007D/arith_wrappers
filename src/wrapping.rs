@@ -9,56 +9,69 @@ pub struct Wrapping<T>(pub T);
 impl<T: Wrap> Wrap for Wrapping<T> {
     type Output = Self;
 
+    #[inline]
     fn wrapping_abs(self) -> Self::Output {
         self.wrapping_abs()
     }
 
-    fn wrapping_add(self, rhs: Self) -> Self::Output {
+    #[inline]
+    fn wrapping_add(self, rhs: impl Into<Self>) -> Self::Output {
         self.wrapping_add(rhs)
     }
 
-    fn wrapping_div(self, rhs: Self) -> Self::Output {
+    #[inline]
+    fn wrapping_div(self, rhs: impl Into<Self>) -> Self::Output {
         self.wrapping_div(rhs)
     }
 
-    fn wrapping_div_euclid(self, rhs: Self) -> Self::Output {
+    #[inline]
+    fn wrapping_div_euclid(self, rhs: impl Into<Self>) -> Self::Output {
         self.wrapping_div_euclid(rhs)
     }
 
-    fn wrapping_mul(self, rhs: Self) -> Self::Output {
+    #[inline]
+    fn wrapping_mul(self, rhs: impl Into<Self>) -> Self::Output {
         self.wrapping_mul(rhs)
     }
 
+    #[inline]
     fn wrapping_neg(self) -> Self::Output {
         self.wrapping_neg()
     }
 
+    #[inline]
     fn wrapping_pow(self, rhs: u32) -> Self::Output {
         self.wrapping_pow(rhs)
     }
 
-    fn wrapping_rem(self, rhs: Self) -> Self::Output {
+    #[inline]
+    fn wrapping_rem(self, rhs: impl Into<Self>) -> Self::Output {
         self.wrapping_rem(rhs)
     }
 
-    fn wrapping_rem_euclid(self, rhs: Self) -> Self::Output {
+    #[inline]
+    fn wrapping_rem_euclid(self, rhs: impl Into<Self>) -> Self::Output {
         self.wrapping_rem_euclid(rhs)
     }
 
+    #[inline]
     fn wrapping_shl(self, rhs: u32) -> Self::Output {
         self.wrapping_shl(rhs)
     }
 
+    #[inline]
     fn wrapping_shr(self, rhs: u32) -> Self::Output {
         self.wrapping_shr(rhs)
     }
 
-    fn wrapping_sub(self, rhs: Self) -> Self::Output {
+    #[inline]
+    fn wrapping_sub(self, rhs: impl Into<Self>) -> Self::Output {
         self.wrapping_sub(rhs)
     }
 }
 
 impl<T: PartialEq> PartialEq for Wrapping<T> {
+    #[inline]
     fn eq(&self, rhs: &Self) -> bool {
         self.0 == rhs.0
     }
@@ -68,6 +81,7 @@ impl<T: PartialEq> PartialEq for Wrapping<T> {
 impl<T: Add<Output = T>> Deref for Wrapping<T> {
     type Target = T;
 
+    #[inline]
     fn deref(&self) -> &Self::Target {
         &self.0
     }
@@ -76,6 +90,7 @@ impl<T: Add<Output = T>> Deref for Wrapping<T> {
 impl<T: Wrap<R, Output = T>, R> Add<R> for Wrapping<T> {
     type Output = Self;
 
+    #[inline]
     fn add(self, rhs: R) -> Self::Output {
         Self(self.0.wrapping_add(rhs))
     }
