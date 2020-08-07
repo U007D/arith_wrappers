@@ -1,10 +1,15 @@
 use arith_traits::Wrap;
-use std::ops::{Add, Deref};
+use std::{
+    cmp::Ordering,
+    fmt::{Display, Formatter, Result as FmtResult},
+    hash::{Hash, Hasher},
+    ops::{Add, Deref},
+};
 
 #[derive(Debug)]
 pub struct Wrapping<T>(pub T);
 
-// Suppress false positive recursion warning
+// Suppress false-positive recursion warning (`self.wrapping_*()` is not recursive)
 #[allow(unconditional_recursion)]
 impl<T: Wrap> Wrap for Wrapping<T> {
     type Output = Self;
@@ -70,22 +75,64 @@ impl<T: Wrap> Wrap for Wrapping<T> {
     }
 }
 
-impl<T: PartialEq> PartialEq for Wrapping<T> {
-    #[inline]
-    fn eq(&self, rhs: &Self) -> bool {
-        self.0 == rhs.0
+impl<T: Clone> Clone for Wrapping<T> {
+    fn clone(&self) -> Self {
+        Self(self.0.clone())
     }
 }
-// TODO: Add conditional impls for Eq, Partial/Ord, Hash, etc
 
-impl<T: Add<Output = T>> Deref for Wrapping<T> {
+impl<T: Deref> Deref for Wrapping<T> {
     type Target = T;
-
     #[inline]
     fn deref(&self) -> &Self::Target {
         &self.0
     }
 }
+
+impl<T: Display> Display for Wrapping<T> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
+        self.0.fmt(f)
+    }
+}
+
+impl<T: Hash> Hash for Wrapping<T> {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.0.hash(state);
+    }
+}
+
+impl<T: Ord> Ord for Wrapping<T> {
+    #[inline]
+    fn cmp(&self, rhs: &Self) -> Ordering {
+        self.0.cmp(&rhs.0)
+    }
+}
+
+impl<T: PartialOrd> PartialOrd for Wrapping<T> {
+    #[inline]
+    fn partial_cmp(&self, rhs: &Self) -> Option<Ordering> {
+        self.0.partial_cmp(&rhs.0)
+    }
+}
+
+impl<T: Eq> Eq for Wrapping<T> {}
+
+impl<T: PartialEq> PartialEq for Wrapping<T> {
+    #[inline]
+    fn eq(&self, rhs: &Self) -> bool {
+        self.0.eq(&rhs.0)
+    }
+}
+
+// impl<T: Add<Output = T>> Deref for Wrapping<T> {
+//     type Target = T;
+//
+//     #[inline]
+//     fn deref(&self) -> &Self::Target {
+//         &self.0
+//     }
+// }
+//
 
 impl<T: Wrap<R, Output = T>, R> Add<R> for Wrapping<T> {
     type Output = Self;
