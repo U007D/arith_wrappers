@@ -1,17 +1,18 @@
 [package]
 authors = ["u007d <b2b@humanenginuity.com>"]
 categories = []
+description = "Rust's `std` offers the [`Wrapping`](std::num::Wrapping) type for \"intentionally wrapping\" arithmetic, but curiously does not provide analagous implementations for intentionally saturating, checked, overflowing or panicking arithmetic.  This crate addresses these missing wrappers as well as re-exports `std`'s [`Wrapping`](std::num::Wrapping) type for completeness and consistency."
 edition = "2018"
 keywords = []
-license = "MIT or Apache-2.0"
+license = "MIT OR Apache-2.0"
 name = "arith_wrappers"
 readme = "README.md"
 repository = "https://github.com/u007d/arith_wrappers"
 version = "0.1.0"
 
 [dependencies]
-thiserror = "1.*"
-arith_traits = { git = "https://github.com/u007d/arith_traits" }
+thiserror = "1"
+arith_traits = "0.1"
 
 [profile.dev]
 codegen-units = 1

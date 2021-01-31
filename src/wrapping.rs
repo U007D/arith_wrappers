@@ -81,6 +81,16 @@ impl<T: Clone> Clone for Wrapping<T> {
     }
 }
 
+// Determine
+// impl<T: Add<Output = T>> Deref for Wrapping<T> {
+//     type Target = T;
+//
+//     #[inline]
+//     fn deref(&self) -> &Self::Target {
+//         &self.0
+//     }
+// }
+
 impl<T: Deref> Deref for Wrapping<T> {
     type Target = T;
     #[inline]
@@ -123,16 +133,6 @@ impl<T: PartialEq> PartialEq for Wrapping<T> {
         self.0.eq(&rhs.0)
     }
 }
-
-// impl<T: Add<Output = T>> Deref for Wrapping<T> {
-//     type Target = T;
-//
-//     #[inline]
-//     fn deref(&self) -> &Self::Target {
-//         &self.0
-//     }
-// }
-//
 
 impl<T: Wrap<R, Output = T>, R> Add<R> for Wrapping<T> {
     type Output = Self;
