@@ -1,9 +1,11 @@
 # arith_wrappers
 
-Rust's `std` offers the [`Wrapping`](std::num::Wrapping) type for "intentionally wrapping" arithmetic,
-but curiously does not provide analagous implementations for intentionally saturating, checked, 
-overflowing or panicking arithmetic.  This crate addresses these missing wrappers as well as 
-re-exports `std`'s [`Wrapping`](std::num::Wrapping) type for completeness and consistency. 
+Rust's `std` offers the [`Wrapping`](https://doc.rust-lang.org/std/num/struct.Wrapping.html) type for "intentionally 
+wrapping" arithmetic, but curiously does not provide analogous implementations for intentionally saturating, checked, 
+overflowing or panicking arithmetic.  This crate addresses these missing wrappers as well as exports an alternative to 
+`std`'s [`Wrapping`](https://doc.rust-lang.org/std/num/struct.Wrapping.html), providing a consistent interface across 
+all wrappers in this crate as well as some benefits like `trait`-enforced access to `T::MIN` and `T::MAX` where `T`
+implements any of the wrappers defined in this crate.
 
 Without these wrappers, performing correct arithmetic is verbose, error-prone and pedantic, leading
 to ignoring the problems altogether or hard-to-maintain implementations.

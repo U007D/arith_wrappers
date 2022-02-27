@@ -1,144 +1,127 @@
-use arith_traits::Wrap;
+#![allow(clippy::inline_always)]
+
+use arith_traits::{IMinMax, IWrapping};
 use std::{
-    cmp::Ordering,
     fmt::{Display, Formatter, Result as FmtResult},
-    hash::{Hash, Hasher},
+    hash::Hash,
     ops::{Add, Deref},
 };
 
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, PartialOrd)]
 pub struct Wrapping<T>(pub T);
 
-// Suppress false-positive recursion warning (`self.wrapping_*()` is not recursive)
-#[allow(unconditional_recursion)]
-impl<T: Wrap> Wrap for Wrapping<T> {
+impl<T> IWrapping<T> for Wrapping<T>
+where
+    T: IWrapping,
+    Self: IMinMax,
+{
     type Output = Self;
 
-    #[inline]
+    #[inline(always)]
     fn wrapping_abs(self) -> Self::Output {
-        self.wrapping_abs()
+        Self(self.0.wrapping_abs())
     }
 
-    #[inline]
-    fn wrapping_add(self, rhs: Self) -> Self::Output {
-        self.wrapping_add(rhs)
+    #[inline(always)]
+    fn wrapping_add(self, rhs: T) -> Self::Output {
+        Self(self.0.wrapping_add(rhs))
     }
 
-    #[inline]
-    fn wrapping_div(self, rhs: Self) -> Self::Output {
-        self.wrapping_div(rhs)
+    #[inline(always)]
+    fn wrapping_div(self, rhs: T) -> Self::Output {
+        Self(self.0.wrapping_div(rhs))
     }
 
-    #[inline]
-    fn wrapping_div_euclid(self, rhs: Self) -> Self::Output {
-        self.wrapping_div_euclid(rhs)
+    #[inline(always)]
+    fn wrapping_div_euclid(self, rhs: T) -> Self::Output {
+        Self(self.0.wrapping_div_euclid(rhs))
     }
 
-    #[inline]
-    fn wrapping_mul(self, rhs: Self) -> Self::Output {
-        self.wrapping_mul(rhs)
+    #[inline(always)]
+    fn wrapping_mul(self, rhs: T) -> Self::Output {
+        Self(self.0.wrapping_mul(rhs))
     }
 
-    #[inline]
+    #[inline(always)]
     fn wrapping_neg(self) -> Self::Output {
-        self.wrapping_neg()
+        Self(self.0.wrapping_neg())
     }
 
-    #[inline]
+    #[inline(always)]
     fn wrapping_pow(self, rhs: u32) -> Self::Output {
-        self.wrapping_pow(rhs)
+        Self(self.0.wrapping_pow(rhs))
     }
 
-    #[inline]
-    fn wrapping_rem(self, rhs: Self) -> Self::Output {
-        self.wrapping_rem(rhs)
+    #[inline(always)]
+    fn wrapping_rem(self, rhs: T) -> Self::Output {
+        Self(self.0.wrapping_rem(rhs))
     }
 
-    #[inline]
-    fn wrapping_rem_euclid(self, rhs: Self) -> Self::Output {
-        self.wrapping_rem_euclid(rhs)
+    #[inline(always)]
+    fn wrapping_rem_euclid(self, rhs: T) -> Self::Output {
+        Self(self.0.wrapping_rem_euclid(rhs))
     }
 
-    #[inline]
+    #[inline(always)]
     fn wrapping_shl(self, rhs: u32) -> Self::Output {
-        self.wrapping_shl(rhs)
+        Self(self.0.wrapping_shl(rhs))
     }
 
-    #[inline]
+    #[inline(always)]
     fn wrapping_shr(self, rhs: u32) -> Self::Output {
-        self.wrapping_shr(rhs)
+        Self(self.0.wrapping_shr(rhs))
     }
 
-    #[inline]
-    fn wrapping_sub(self, rhs: Self) -> Self::Output {
-        self.wrapping_sub(rhs)
-    }
-}
-
-impl<T: Clone> Clone for Wrapping<T> {
-    fn clone(&self) -> Self {
-        Self(self.0.clone())
+    #[inline(always)]
+    fn wrapping_sub(self, rhs: T) -> Self::Output {
+        Self(self.0.wrapping_sub(rhs))
     }
 }
 
-// Determine
-// impl<T: Add<Output = T>> Deref for Wrapping<T> {
-//     type Target = T;
-//
-//     #[inline]
-//     fn deref(&self) -> &Self::Target {
-//         &self.0
-//     }
-// }
-
-impl<T: Deref> Deref for Wrapping<T> {
+impl<T> Deref for Wrapping<T> {
     type Target = T;
-    #[inline]
+    #[inline(always)]
     fn deref(&self) -> &Self::Target {
         &self.0
     }
 }
 
-impl<T: Display> Display for Wrapping<T> {
+impl<T> Display for Wrapping<T>
+where
+    T: Display,
+{
     fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
         self.0.fmt(f)
     }
 }
 
-impl<T: Hash> Hash for Wrapping<T> {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        self.0.hash(state);
-    }
-}
-
-impl<T: Ord> Ord for Wrapping<T> {
-    #[inline]
-    fn cmp(&self, rhs: &Self) -> Ordering {
-        self.0.cmp(&rhs.0)
-    }
-}
-
-impl<T: PartialOrd> PartialOrd for Wrapping<T> {
-    #[inline]
-    fn partial_cmp(&self, rhs: &Self) -> Option<Ordering> {
-        self.0.partial_cmp(&rhs.0)
-    }
-}
-
-impl<T: Eq> Eq for Wrapping<T> {}
-
-impl<T: PartialEq> PartialEq for Wrapping<T> {
-    #[inline]
-    fn eq(&self, rhs: &Self) -> bool {
-        self.0.eq(&rhs.0)
-    }
-}
-
-impl<T: Wrap<R, Output = T>, R> Add<R> for Wrapping<T> {
+impl<T, TRhs> Add<TRhs> for Wrapping<T>
+where
+    TRhs: Into<T>,
+    T: IWrapping<Output = T>,
+{
     type Output = Self;
 
-    #[inline]
-    fn add(self, rhs: R) -> Self::Output {
-        Self(self.0.wrapping_add(rhs))
+    #[inline(always)]
+    fn add(self, rhs: TRhs) -> Self::Output {
+        Self(self.0.wrapping_add(rhs.into()))
     }
 }
+
+macro_rules! min_max_impl {
+    ($($t:ty)*) => ($(
+        impl IMinMax for Wrapping<$t> {
+            const MAX: Self = Self(<$t>::MAX);
+            const MIN: Self = Self(<$t>::MIN);
+        }
+
+        impl From<Wrapping<Self>> for $t {
+            #[inline(always)]
+            fn from(wrapper: Wrapping<Self>) -> Self {
+                wrapper.0
+            }
+        }
+    )*)
+}
+
+min_max_impl! { i8 i16 i32 i64 i128 isize u8 u16 u32 u64 u128 usize }
