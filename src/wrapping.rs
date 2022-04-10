@@ -8,9 +8,9 @@ use std::{
 };
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, PartialOrd)]
-pub struct Wrapping<T>(pub T);
+pub struct WrappingWrapper<T>(pub T);
 
-impl<T> IWrappingOps<T> for Wrapping<T>
+impl<T> IWrappingOps<T> for WrappingWrapper<T>
 where
     T: IWrappingOps<Output = T> + PartialOrd,
     Self: IMinMax,
@@ -78,7 +78,7 @@ where
     }
 }
 
-impl<T> Deref for Wrapping<T> {
+impl<T> Deref for WrappingWrapper<T> {
     type Target = T;
     #[inline(always)]
     fn deref(&self) -> &Self::Target {
@@ -86,7 +86,7 @@ impl<T> Deref for Wrapping<T> {
     }
 }
 
-impl<T> Display for Wrapping<T>
+impl<T> Display for WrappingWrapper<T>
 where
     T: Display,
 {
@@ -95,7 +95,7 @@ where
     }
 }
 
-impl<T, TRhs> Add<TRhs> for Wrapping<T>
+impl<T, TRhs> Add<TRhs> for WrappingWrapper<T>
 where
     TRhs: Into<T>,
     T: IWrappingOps<Output = T>,

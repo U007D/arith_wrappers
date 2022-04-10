@@ -20,4 +20,4 @@ mod consts;
 mod error;
 mod wrapping;
 pub use error::{Error, Result};
-pub use wrapping::Wrapping;
+pub use wrapping::WrappingWrapper;
