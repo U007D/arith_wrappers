@@ -1,6 +1,6 @@
 #![allow(clippy::inline_always)]
 
-use arith_traits::{IMinMax, IWrapping};
+use arith_traits::{IMinMax, IWrappingOps};
 use std::{
     fmt::{Display, Formatter, Result as FmtResult},
     hash::Hash,
@@ -10,9 +10,9 @@ use std::{
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, PartialOrd)]
 pub struct Wrapping<T>(pub T);
 
-impl<T> IWrapping<T> for Wrapping<T>
+impl<T> IWrappingOps<T> for Wrapping<T>
 where
-    T: IWrapping<Output = T>,
+    T: IWrappingOps<Output = T> + PartialOrd,
     Self: IMinMax,
 {
     type Output = Self;
@@ -98,7 +98,7 @@ where
 impl<T, TRhs> Add<TRhs> for Wrapping<T>
 where
     TRhs: Into<T>,
-    T: IWrapping<Output = T>,
+    T: IWrappingOps<Output = T>,
 {
     type Output = Self;
 
