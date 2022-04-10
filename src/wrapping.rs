@@ -12,7 +12,7 @@ pub struct Wrapping<T>(pub T);
 
 impl<T> IWrapping<T> for Wrapping<T>
 where
-    T: IWrapping,
+    T: IWrapping<Output = T>,
     Self: IMinMax,
 {
     type Output = Self;
