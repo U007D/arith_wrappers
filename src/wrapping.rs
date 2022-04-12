@@ -1,16 +1,59 @@
 #![allow(clippy::inline_always)]
 
-use arith_traits::{IMinMax, IWrappingOps};
 use std::{
     fmt::{Display, Formatter, Result as FmtResult},
     hash::Hash,
     ops::{Add, Deref},
 };
 
+use arith_traits::{IMinMax, IWrappingNonGenericOps, IWrappingOps};
+
+#[allow(clippy::module_name_repetitions)]
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, PartialOrd)]
 pub struct WrappingWrapper<T>(pub T);
 
 impl<T> IWrappingOps<T> for WrappingWrapper<T>
+where
+    T: IWrappingOps<Output = T> + PartialOrd,
+    Self: IMinMax,
+{
+    #[inline(always)]
+    fn wrapping_add(self, rhs: T) -> <Self as IWrappingNonGenericOps>::Output {
+        Self(self.0.wrapping_add(rhs))
+    }
+
+    #[inline(always)]
+    fn wrapping_div(self, rhs: T) -> <Self as IWrappingNonGenericOps>::Output {
+        Self(self.0.wrapping_div(rhs))
+    }
+
+    #[inline(always)]
+    fn wrapping_div_euclid(self, rhs: T) -> <Self as IWrappingNonGenericOps>::Output {
+        Self(self.0.wrapping_div_euclid(rhs))
+    }
+
+    #[inline(always)]
+    fn wrapping_mul(self, rhs: T) -> <Self as IWrappingNonGenericOps>::Output {
+        Self(self.0.wrapping_mul(rhs))
+    }
+
+    #[inline(always)]
+    fn wrapping_rem(self, rhs: T) -> <Self as IWrappingNonGenericOps>::Output {
+        Self(self.0.wrapping_rem(rhs))
+    }
+
+    #[inline(always)]
+    fn wrapping_rem_euclid(self, rhs: T) -> <Self as IWrappingNonGenericOps>::Output {
+        Self(self.0.wrapping_rem_euclid(rhs))
+    }
+
+    #[inline(always)]
+    fn wrapping_sub(self, rhs: T) -> <Self as IWrappingNonGenericOps>::Output {
+        Self(self.0.wrapping_sub(rhs))
+    }
+}
+
+impl<T> IWrappingNonGenericOps for WrappingWrapper<T>
 where
     T: IWrappingOps<Output = T> + PartialOrd,
     Self: IMinMax,
@@ -20,26 +63,6 @@ where
     #[inline(always)]
     fn wrapping_abs(self) -> Self::Output {
         Self(self.0.wrapping_abs())
-    }
-
-    #[inline(always)]
-    fn wrapping_add(self, rhs: T) -> Self::Output {
-        Self(self.0.wrapping_add(rhs))
-    }
-
-    #[inline(always)]
-    fn wrapping_div(self, rhs: T) -> Self::Output {
-        Self(self.0.wrapping_div(rhs))
-    }
-
-    #[inline(always)]
-    fn wrapping_div_euclid(self, rhs: T) -> Self::Output {
-        Self(self.0.wrapping_div_euclid(rhs))
-    }
-
-    #[inline(always)]
-    fn wrapping_mul(self, rhs: T) -> Self::Output {
-        Self(self.0.wrapping_mul(rhs))
     }
 
     #[inline(always)]
@@ -53,16 +76,6 @@ where
     }
 
     #[inline(always)]
-    fn wrapping_rem(self, rhs: T) -> Self::Output {
-        Self(self.0.wrapping_rem(rhs))
-    }
-
-    #[inline(always)]
-    fn wrapping_rem_euclid(self, rhs: T) -> Self::Output {
-        Self(self.0.wrapping_rem_euclid(rhs))
-    }
-
-    #[inline(always)]
     fn wrapping_shl(self, rhs: u32) -> Self::Output {
         Self(self.0.wrapping_shl(rhs))
     }
@@ -70,11 +83,6 @@ where
     #[inline(always)]
     fn wrapping_shr(self, rhs: u32) -> Self::Output {
         Self(self.0.wrapping_shr(rhs))
-    }
-
-    #[inline(always)]
-    fn wrapping_sub(self, rhs: T) -> Self::Output {
-        Self(self.0.wrapping_sub(rhs))
     }
 }
 
@@ -110,14 +118,14 @@ where
 
 macro_rules! min_max_impl {
     ($($t:ty)*) => ($(
-        impl IMinMax for Wrapping<$t> {
+        impl IMinMax for WrappingWrapper<$t> {
             const MAX: Self = Self(<$t>::MAX);
             const MIN: Self = Self(<$t>::MIN);
         }
 
-        impl From<Wrapping<Self>> for $t {
+        impl From<WrappingWrapper<Self>> for $t {
             #[inline(always)]
-            fn from(wrapper: Wrapping<Self>) -> Self {
+            fn from(wrapper: WrappingWrapper<Self>) -> Self {
                 wrapper.0
             }
         }
