@@ -10,7 +10,7 @@ implements any of the wrappers defined in this crate.
 Without these wrappers, performing correct arithmetic is verbose, error-prone and pedantic, leading
 to ignoring the problems altogether or hard-to-maintain implementations.
 
-This crate is at a very early stage of implementation and should be considered a PoC.
+This crate is at a very early pre-alpha stage of implementation and should be considered a PoC.
 
 ## License
 Licensed under either:

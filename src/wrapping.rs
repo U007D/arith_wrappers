@@ -6,7 +6,7 @@ use std::{
     ops::{Add, Deref},
 };
 
-use arith_traits::{IMinMax, IWrappingNonGenericOps, IWrappingOps};
+use arith_traits::{IMinMax, IUnaryWrappingOps, IWrappingOps};
 
 #[allow(clippy::module_name_repetitions)]
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, PartialOrd)]
@@ -18,42 +18,42 @@ where
     Self: IMinMax,
 {
     #[inline(always)]
-    fn wrapping_add(self, rhs: T) -> <Self as IWrappingNonGenericOps>::Output {
+    fn wrapping_add(self, rhs: T) -> <Self as IUnaryWrappingOps>::Output {
         Self(self.0.wrapping_add(rhs))
     }
 
     #[inline(always)]
-    fn wrapping_div(self, rhs: T) -> <Self as IWrappingNonGenericOps>::Output {
+    fn wrapping_div(self, rhs: T) -> <Self as IUnaryWrappingOps>::Output {
         Self(self.0.wrapping_div(rhs))
     }
 
     #[inline(always)]
-    fn wrapping_div_euclid(self, rhs: T) -> <Self as IWrappingNonGenericOps>::Output {
+    fn wrapping_div_euclid(self, rhs: T) -> <Self as IUnaryWrappingOps>::Output {
         Self(self.0.wrapping_div_euclid(rhs))
     }
 
     #[inline(always)]
-    fn wrapping_mul(self, rhs: T) -> <Self as IWrappingNonGenericOps>::Output {
+    fn wrapping_mul(self, rhs: T) -> <Self as IUnaryWrappingOps>::Output {
         Self(self.0.wrapping_mul(rhs))
     }
 
     #[inline(always)]
-    fn wrapping_rem(self, rhs: T) -> <Self as IWrappingNonGenericOps>::Output {
+    fn wrapping_rem(self, rhs: T) -> <Self as IUnaryWrappingOps>::Output {
         Self(self.0.wrapping_rem(rhs))
     }
 
     #[inline(always)]
-    fn wrapping_rem_euclid(self, rhs: T) -> <Self as IWrappingNonGenericOps>::Output {
+    fn wrapping_rem_euclid(self, rhs: T) -> <Self as IUnaryWrappingOps>::Output {
         Self(self.0.wrapping_rem_euclid(rhs))
     }
 
     #[inline(always)]
-    fn wrapping_sub(self, rhs: T) -> <Self as IWrappingNonGenericOps>::Output {
+    fn wrapping_sub(self, rhs: T) -> <Self as IUnaryWrappingOps>::Output {
         Self(self.0.wrapping_sub(rhs))
     }
 }
 
-impl<T> IWrappingNonGenericOps for WrappingWrapper<T>
+impl<T> IUnaryWrappingOps for WrappingWrapper<T>
 where
     T: IWrappingOps<Output = T> + PartialOrd,
     Self: IMinMax,

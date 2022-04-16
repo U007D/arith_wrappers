@@ -8,10 +8,10 @@ license = "MIT OR Apache-2.0"
 name = "arith_wrappers"
 readme = "README.md"
 repository = "https://github.com/u007d/arith_wrappers"
-version = "0.1.0"
+version = "0.2.0"
 
 [dependencies]
-thiserror = "1.0.26"
+thiserror = "1.0.30"
 arith_traits = { version = "0.2.0", git = "https://github.com/u007d/arith_traits" }
 
 [profile.dev]
